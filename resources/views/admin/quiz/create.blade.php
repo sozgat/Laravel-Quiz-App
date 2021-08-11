@@ -6,19 +6,19 @@
                 @csrf
                 <div class="mb-3">
                     <label>Quiz Title</label>
-                    <input type="text" name="title" class="form-control" required>
+                    <input type="text" name="title" class="form-control" value="{{ old('title') }}">
                 </div>
                 <div class="mb-3">
                     <label>Quiz Description</label>
-                    <textarea name="description" class="form-control" rows="4"></textarea>
+                    <textarea name="description" class="form-control" rows="4">{{ old('description') }}</textarea>
                 </div>
                 <div class="mb-3">
-                    <input id="isFinished" type="checkbox">
+                    <input id="isFinished" @if(old('finished_at')) checked @endif type="checkbox">
                     <label>Do you want a finishing date?</label>
                 </div>
-                <div id="finishedInput" style="display: none" class="mb-3">
+                <div id="finishedInput" @if(!old('finished_at')) style="display: none" @endif class="mb-3">
                     <label>Quiz Finishing Date</label>
-                    <input type="datetime-local" name="finished_at" class="form-control">
+                    <input type="datetime-local" id="finished_at" name="finished_at" value="{{ old('finished_at') }}" class="form-control">
                 </div>
                 <div class="mb-3">
                     <button type="submit" class="btn btn-success btn-sm w-100">Create Quiz</button>
@@ -28,14 +28,18 @@
     </div>
     <x-slot name="js">
         <script>
-            $('#isFinished').change(function (){
-                if ($('#isFinished').is(':checked')){
-                    $('#finishedInput').show();
-                }
-                else{
-                    $('#finishedInput').hide();
-                }
+            window.addEventListener('load', function() {
+                $('#isFinished').change(function (){
+                    if ($('#isFinished').is(':checked')){
+                        $('#finishedInput').show();
+                    }
+                    else{
+                        $("#finished_at").val("yyyy-aa-ggT--:--");
+                        $('#finishedInput').hide();
+                    }
+                })
             })
+
         </script>
     </x-slot>
 </x-app-layout>
